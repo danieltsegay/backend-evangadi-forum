@@ -5,6 +5,7 @@ const dbConnection = mysql2.createPool({
   database: process.env.DB_NAME,
   host: process.env.DB_HOST,
   password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
   connectionLimit: 10,
 });
 

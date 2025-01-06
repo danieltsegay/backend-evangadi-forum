@@ -77,7 +77,7 @@ app.get("/user", async (req, res) => {
 async function start() {
   try {
     const result = await dbConnection.execute("select 'test'");
-    app.listen(port, () => {
+    app.listen(port,'0.0.0.0',() => {
       console.log("Database connection established");
       console.log(`Server is running on port ${port}`);
     });
