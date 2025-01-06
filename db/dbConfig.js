@@ -8,11 +8,12 @@ const dbConnection = mysql2.createPool({
   port: process.env.DB_PORT,
   connectionLimit: 10,
 });
-dbConnection.connect(err => {
+dbConnection.getConnection((err, connection) => {
   if (err) {
     console.error('Database connection error:', err);
   } else {
     console.log('Database connected successfully');
+    connection.release(); 
   }
 });
 
