@@ -1,42 +1,32 @@
-require("dotenv").config()
-const express = require("express")
+require("dotenv").config();
+const express = require("express");
 const dbConnection = require("./db/dbConfig");
-const app = express()
-const port = process.env.PORT || 4000;
-const cors = require("cors")
+const app = express();
+const cors = require("cors");
 
-app.use(cors())
+const port = process.env.PORT || 4000; 
+
+app.use(cors());
+
 // db connection
 const userRoutes = require("./routes/userRoute");
 const answerRoute = require("./routes/answerRoute");
- const questionRouter = require("./routes/questionRoute");
+const questionRouter = require("./routes/questionRoute");
 
 // Json middleware to extract Json data
-app.use(express.json())
-
+app.use(express.json());
 
 // user routes middleware
-app.use("/api/user",userRoutes)
+app.use("/api/user", userRoutes);
 
-
-
-// questions routes middleware 
+// questions routes middleware
 app.use("/api", questionRouter);
-
-
 
 // answers routes middleware
 app.use("/api", answerRoute);
 
-
-
-
-
-
-// create tables 
-
-
-app.get("/user",async (req, res) => {
+// create tables
+app.get("/user", async (req, res) => {
   const createUserTable = `
     CREATE TABLE IF NOT EXISTS User(
       user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,8 +48,8 @@ app.get("/user",async (req, res) => {
         created_at TIMESTAMP default CURRENT_TIMESTAMP,
         user_id INT NOT NULL,
         FOREIGN KEY(user_id) REFERENCES User(user_id) ON DELETE CASCADE
-);
-`;
+    );
+  `;
 
   const answerTable = `
     CREATE TABLE IF NOT EXISTS Answers(
@@ -70,7 +60,8 @@ app.get("/user",async (req, res) => {
         created_at TIMESTAMP default CURRENT_TIMESTAMP,
         FOREIGN KEY(user_id) REFERENCES User(user_id) ON DELETE CASCADE,
         FOREIGN KEY(question_id) REFERENCES Questions(question_id) ON DELETE CASCADE
-    )`;
+    );
+  `;
 
   try {
     await dbConnection.query(createUserTable);
@@ -83,20 +74,15 @@ app.get("/user",async (req, res) => {
   }
 });
 
-
-
 async function start() {
-    try {
-      const result = await dbConnection.execute("select 'test'");
-        app.listen(port)
-        console.log("database connection established");
-        console.log(`listening on ${port}`);
-
-    } catch (error) {
-      console.log(error.message);
-    }
+  try {
+    const result = await dbConnection.execute("select 'test'");
+    app.listen(port, () => {
+      console.log("Database connection established");
+      console.log(`Server is running on port ${port}`);
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
 }
-start()
-
-
-
+start();
